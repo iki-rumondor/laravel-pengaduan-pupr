@@ -38,7 +38,6 @@ class PengaduanController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
         if (isset($request->aduan_id))
             $validatedData = $request->validate([
                 'kategori' => ['required', Rule::in(['pemeliharaan', 'pasang_baru'])],

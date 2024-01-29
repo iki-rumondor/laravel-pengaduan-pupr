@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gambar;
+use App\Models\Pengaduan;
 use App\Models\Wilayah;
 use App\Services\PengaduanService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\ValidationException;
 
@@ -33,6 +35,15 @@ class WelcomeController extends Controller
 
     public function storeAduan(Request $request)
     {
+        $today = Carbon::today()->toDateString();
+        $pengaduan = Pengaduan::where("ip_address", $request->ip())
+            ->whereDate('created_at', $today)
+            ->first();
+
+        if ($pengaduan) {
+            return back()->with('failure', "Aduan Anda Sedang Kami Proses, Silahkan Tunggu Hingga Aduan Selesai Diproses");
+        }
+
         $validatedData = $request->validate([
             'nama_pengadu' => ['required', 'max:255'],
             'alamat_pengadu' => ['required', 'max:500'],
@@ -40,6 +51,7 @@ class WelcomeController extends Controller
             'no_telepon_pengadu' => ['required', 'max:50'],
             'bukti_pendukung' => ['required', File::image()]
         ]);
+
         if (!isset($request->latitude) || !isset($request->longitude))
             throw ValidationException::withMessages([
                 'titik_lokasi' => 'Silahkan pilih titik lokasi'
@@ -47,6 +59,7 @@ class WelcomeController extends Controller
         $validatedData['aduan_masyarakat'] = true;
         $validatedData['latitude'] = $request->latitude;
         $validatedData['longitude'] = $request->longitude;
+        $validatedData['ip_address'] = $request->ip();
         try {
             $pengaduan = $this->pengaduanService->save($validatedData);
             $imgName = time() . '.jpg';
