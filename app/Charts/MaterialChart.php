@@ -36,7 +36,7 @@ class MaterialChart
                 $allPengaduan = $allPengaduan->whereHas('wilayah', function($wilayah) {
                     $wilayah->where('koarmat_id', auth()->user()->koarmat_id);
                 })->get();
-            } else 
+            } else
                 $allPengaduan = $allPengaduan->get();
             foreach ($allPengaduan as $pengaduan) {
                 foreach($pengaduan->material as $material) {
@@ -55,4 +55,5 @@ class MaterialChart
         $this->chart->setXAxis($xaxis);
         return $this->chart;
     }
+
 }
