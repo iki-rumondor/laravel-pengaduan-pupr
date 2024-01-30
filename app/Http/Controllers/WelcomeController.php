@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\StatusPemeliharaan;
 use App\Models\Gambar;
 use App\Models\Pengaduan;
 use App\Models\Wilayah;
@@ -38,6 +39,7 @@ class WelcomeController extends Controller
         $today = Carbon::today()->toDateString();
         $pengaduan = Pengaduan::where("ip_address", $request->ip())
             ->whereDate('created_at', $today)
+            ->whereNot('ket', StatusPemeliharaan::SUDAH_DIPROSES)
             ->first();
 
         if ($pengaduan) {
