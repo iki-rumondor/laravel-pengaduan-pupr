@@ -49,6 +49,12 @@
                     <div class="col-sm-3">Ket</div>
                     <div class="col-sm-9"><h5 class="m-0 badge {{ $selectedPengaduan->ket == App\Helper\StatusPemeliharaan::BELUM_DIPROSES ? 'bg-warning text-dark' : ($selectedPengaduan->ket == App\Helper\StatusPemeliharaan::SEMENTARA_DIPROSES ? 'bg-primary text-white' : ($selectedPengaduan->ket == App\Helper\StatusPemeliharaan::SUDAH_DIPROSES ? 'bg-success text-white' : '')) }} rounded-pill">{{ $selectedPengaduan->ket }}</h5></div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3">Lokasi</div>
+                    <div class="col-sm-9">
+                        <a class="link" target="_blank" href="https://maps.google.com/?q={{ $selectedPengaduan->latitude }},{{ $selectedPengaduan->longitude }}">Lihat Lokasi Di Maps</a>
+                    </div>
+                </div>
                 <h6 class="fw-semibold mt-5 mb-3">Update status pengaduan</h6>
                 <button class="btn btn-primary rounded-pill px-4" type="button" wire:click=prosesAduan><i class="bi bi-hourglass-split me-2"></i>Pengaduan di proses</button>
                 <button class="btn btn-success rounded-pill px-4 ms-2" type="button" wire:click='selesaiAduan'><i class="bi bi-check2-circle me-2"></i>Pengaduan selesai</button>
